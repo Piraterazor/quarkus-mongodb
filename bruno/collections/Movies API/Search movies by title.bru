@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "{{baseUrl}}/api/movies/search/title",
+    "query": [
+      {
+        "key": "q",
+        "value": "Star Wars",
+        "disabled": false
+      }
+    ],
+    "headers": [
+      {
+        "key": "Accept",
+        "value": "application/json"
+      }
+    ]
+  },
+  "name": "Search movies by title",
+  "description": "Searches for movies with a specific title (case-insensitive partial match)",
+  "tags": ["movies", "search", "title"]
+}

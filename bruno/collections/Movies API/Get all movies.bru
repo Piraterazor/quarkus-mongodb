@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "{{baseUrl}}/api/movies",
+    "query": [
+      {
+        "key": "page",
+        "value": "0",
+        "disabled": false
+      },
+      {
+        "key": "size",
+        "value": "20",
+        "disabled": false
+      }
+    ],
+    "headers": [
+      {
+        "key": "Accept",
+        "value": "application/json"
+      }
+    ]
+  },
+  "name": "Get all movies",
+  "description": "Retrieves a paginated list of movies from the database",
+  "tags": ["movies", "pagination"]
+}
