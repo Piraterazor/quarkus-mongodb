@@ -199,6 +199,35 @@ The project uses [Project Lombok](https://projectlombok.org/) to reduce boilerpl
 - `@ToString` - Generates a toString() method with specified fields
 - These annotations significantly reduce the amount of code that needs to be written and maintained
 
+## CI/CD Pipeline
+
+This project uses Azure DevOps for continuous integration and deployment. The pipeline configuration is defined in the `azure-pipelines.yml` file at the root of the repository.
+
+### Pipeline Configuration
+
+The pipeline consists of two stages:
+
+1. **Build and Test**
+   - Builds the project using Maven and JDK 21
+   - Runs all tests
+   - Publishes test results
+   - Creates and publishes build artifacts
+
+2. **Deploy to Development** (Placeholder)
+   - Downloads the build artifacts
+   - Contains placeholder steps for deployment
+
+### Triggers
+
+The pipeline is triggered automatically when changes are pushed to the `main` branch, except for changes to:
+- README.md
+- .gitignore
+- bruno-api/ directory
+
+### Running the Pipeline
+
+The pipeline runs automatically on push to the main branch. You can also manually trigger it from the Azure DevOps portal.
+
 ## Future Enhancements
 
 Potential improvements for this API:
@@ -210,3 +239,4 @@ Potential improvements for this API:
 5. Add rate limiting
 6. Improve error handling and logging
 7. Add Swagger/OpenAPI documentation
+8. Implement full deployment pipeline for production environments

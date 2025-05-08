@@ -1,0 +1,96 @@
+# Azure DevOps Pipeline for Quarkus MongoDB API
+# This pipeline builds and tests a Quarkus application with Maven
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - README.md
+      - .gitignore
+      - bruno-api/**
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  jdkVersion: '21'
+  mavenVersion: '3.9.5'
+  projectName: 'demo-api-mongodb'
+
+stages:
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: BuildAndTest
+    displayName: 'Build and Test'
+    steps:
+    - task: Maven@3
+      displayName: 'Set up JDK and Maven'
+      inputs:
+        mavenVersionOption: 'Default'
+        jdkVersionOption: $(jdkVersion)
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        goals: 'clean'
+
+    - task: Maven@3
+      displayName: 'Build with Maven'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: $(jdkVersion)
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        goals: 'package'
+
+    - task: Maven@3
+      displayName: 'Run Tests'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: $(jdkVersion)
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        goals: 'test'
+      continueOnError: true
+
+    - task: CopyFiles@2
+      displayName: 'Copy JAR to Artifact Staging Directory'
+      inputs:
+        SourceFolder: 'target'
+        Contents: |
+          *-runner.jar
+          quarkus-app/**
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: '$(projectName)'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: 'Deploy to Development'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy to Development Environment'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: '$(projectName)'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
+    - script: |
+        echo "Deployment step would go here"
+        echo "This is a placeholder for actual deployment commands"
+      displayName: 'Deploy Application (Placeholder)'
