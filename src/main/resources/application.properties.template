@@ -1,6 +1,6 @@
 # MongoDB connection configuration
-quarkus.mongodb.connection-string=
-quarkus.mongodb.database=
+quarkus.mongodb.connection-string=xxxxxxxxxxxxxxxxxxxxxxxxxx
+quarkus.mongodb.database=xxxxxxxxxxxxxx
 
 # Application configuration
 quarkus.application.name=demo-api-mongodb

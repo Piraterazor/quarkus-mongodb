@@ -7,19 +7,19 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 /**
- * Basic test for MovieResource.
+ * Basic test for StoreResource.
  * Note: This test is disabled by default as it requires a MongoDB connection.
  * Enable it after configuring a test MongoDB instance.
  */
 @QuarkusTest
 @Disabled("Requires MongoDB connection")
-public class MovieResourceTest {
+public class StoreResourceTest {
 
     @Test
-    public void testMoviesEndpoint() {
+    public void testStoresEndpoint() {
         // Test that the endpoint is available
         given()
-            .when().get("/api/movies")
+            .when().get("/api/stores")
             .then()
             .statusCode(200);
     }

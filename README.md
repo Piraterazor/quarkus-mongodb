@@ -1,12 +1,12 @@
 # Demo API MongoDB
 
-This project is a RESTful API built with Quarkus that connects to a MongoDB database. It provides endpoints to retrieve movie data from the `embedded_movies` collection in the `sample_mflix` database.
+This project is a RESTful API built with Quarkus that connects to a MongoDB database. It provides endpoints to retrieve Store data from the `embedded_Stores` collection in the `sample_mflix` database.
 
 ## Architecture
 
 The project follows a layered architecture:
 
-1. **Model Layer**: Defines the data structure for movies
+1. **Model Layer**: Defines the data structure for stores
 2. **Repository Layer**: Handles database interactions using Panache
 3. **Service Layer**: Contains business logic
 4. **Resource Layer**: Exposes REST endpoints
@@ -16,19 +16,16 @@ The project follows a layered architecture:
 The application connects to MongoDB using the connection string specified in `application.properties`. Make sure to update this with your own MongoDB connection details:
 
 ```properties
-quarkus.mongodb.connection-string=mongodb+srv://username:password@cluster.mongodb.net/sample_mflix
-quarkus.mongodb.database=sample_mflix
+quarkus.mongodb.connection-string=xxxxxx
+quarkus.mongodb.database=xxxxxx
 ```
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/movies` | Get all movies (paginated) |
-| GET | `/api/movies/{id}` | Get a movie by ID |
-| GET | `/api/movies/search/title?q={title}` | Search movies by title |
-| GET | `/api/movies/search/year/{year}` | Search movies by year |
-| GET | `/api/movies/search/genre/{genre}` | Search movies by genre |
+| GET | `/api/stores` | Get all stores (paginated) |
+| GET | `/api/stores/{id}` | Get a Store by ID |
 
 ## Running the application in dev mode
 
@@ -84,23 +81,15 @@ If you want to learn more about building native executables, please consult <htt
 Here are some example curl commands to interact with the API:
 
 ```bash
-# Get all movies (first page, 20 items)
-curl -X GET "http://localhost:8080/api/movies"
+# Get all stores (first page, 20 items)
+curl -X GET "http://localhost:8080/api/stores"
 
-# Get all movies (second page, 10 items per page)
-curl -X GET "http://localhost:8080/api/movies?page=1&size=10"
+# Get all stores (second page, 10 items per page)
+curl -X GET "http://localhost:8080/api/stores?page=1&size=10"
 
-# Get a movie by ID
-curl -X GET "http://localhost:8080/api/movies/573a1390f29313caabcd4135"
+# Get a Store by ID
+curl -X GET "http://localhost:8080/api/stores/1"
 
-# Search movies by title
-curl -X GET "http://localhost:8080/api/movies/search/title?q=Star%20Wars"
-
-# Search movies by year
-curl -X GET "http://localhost:8080/api/movies/search/year/1977"
-
-# Search movies by genre
-curl -X GET "http://localhost:8080/api/movies/search/genre/Action"
 ```
 
 ## Bruno API Collection
@@ -112,7 +101,7 @@ This project includes a [Bruno](https://www.usebruno.com/) API collection for te
 1. Install Bruno from [https://www.usebruno.com/downloads](https://www.usebruno.com/downloads)
 2. Open Bruno and click "Open Collection"
 3. Navigate to the `bruno` folder in this project and select it
-4. The Movies API collection will be loaded with all the requests
+4. The Stores API collection will be loaded with all the requests
 
 The collection includes requests for all API endpoints and uses environment variables for the base URL. See the `bruno/README.md` file for more details.
 
@@ -120,33 +109,16 @@ The collection includes requests for all API endpoints and uses environment vari
 
 ### JSON Serialization
 
-The API returns complete JSON responses with all fields from the Movie entity:
-
-```json
-{
-  "id": "573a1390f29313caabcd42e8",
-  "title": "The Great Train Robbery",
-  "year": 1903,
-  "genres": ["Western", "Action"],
-  "cast": ["A.C. Abadie", "Gilbert M. 'Broncho Billy' Anderson"],
-  "plot": "A group of bandits stage a brazen train hold-up, only to find a determined posse hot on their heels.",
-  "fullplot": "Among the earliest existing films in American cinema - notable as the first film that presented a narrative story to tell - it depicts a group of cowboy outlaws who hold up a train and rob the passengers. They are then pursued by a posse, who finally catch the robbers, and bring them to justice.",
-  "imdb": {
-    "rating": 7.4,
-    "votes": 17512,
-    "id": 439
-  }
-}
-```
+The API returns complete JSON responses with all fields from the Store entity:
 
 The project uses Quarkus REST Jackson for automatic JSON serialization:
 
 - The `quarkus-rest-jackson` dependency is included in the pom.xml
-- The `@Produces(MediaType.APPLICATION_JSON)` annotation at the class level in MovieResource ensures all endpoints produce JSON
-- Resource methods directly return domain objects (Movie, List<Movie>, PaginatedResponse<Movie>) without wrapping them in Response objects
+- The `@Produces(MediaType.APPLICATION_JSON)` annotation at the class level in StoreResource ensures all endpoints produce JSON
+- Resource methods directly return domain objects (Store, List<Store>, PaginatedResponse<Store>) without wrapping them in Response objects
 - Quarkus automatically handles the serialization of these objects to JSON
 
-The Movie class uses Jackson annotations to ensure proper JSON serialization:
+The Store class uses Jackson annotations to ensure proper JSON serialization:
 
 - `@JsonIgnoreProperties(ignoreUnknown = true)` - Ignores unknown properties during deserialization
 - `@JsonSerialize(using = ToStringSerializer.class)` - Properly serializes MongoDB ObjectId to string
@@ -155,7 +127,7 @@ The Movie class uses Jackson annotations to ensure proper JSON serialization:
 
 The API supports pagination for endpoints that return multiple items:
 
-- The `/api/movies` endpoint returns a paginated response with the following structure:
+- The `/api/stores` endpoint returns a paginated response with the following structure:
   ```json
   {
     "data": [
